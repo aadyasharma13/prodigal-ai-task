@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SLM Sentiment Classifier</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center px-4">
+  <h1 class="text-3xl font-bold text-blue-700 mb-6"> Sentiment Analysis</h1>
+
+  <input type="text" id="queryInput" class="w-full max-w-md p-2 border border-gray-300 rounded shadow" placeholder="Enter a sentence..." />
+  <button onclick="analyze()" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+    Analyze
+  </button>
+
+  <div id="result" class="mt-6 text-xl text-gray-700"></div>
+
+  <script>
+    async function analyze() {
+      const query = document.getElementById("queryInput").value;
+      if (!query) return;
+
+      try {
+        const res = await axios.get(`http://localhost:8000/search?query=${encodeURIComponent(query)}`);
+        const response = res.data;
+        document.getElementById("result").innerHTML =
+          `<strong>Result:</strong> ${JSON.stringify(response)}`;
+      } catch (err) {
+        console.error(err);
+        document.getElementById("result").innerHTML = "<span class='text-red-500'>Error: Could not fetch response</span>";
+      }
+    }
+  </script>
+</body>
+</html>
